@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from './store';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'NeoReduxClass';
+  
+  percent: number
+
+  constructor(private ngRedux: NgRedux<IAppState>) {
+    this.percent = this.ngRedux.getState().percentCompleted
+  }
+
+  ngOnInit() {
+    this.ngRedux.subscribe(() => {
+      console.log(this.percent, this.ngRedux.getState().percentCompleted)
+      if(this.percent !== this.ngRedux.getState().percentCompleted) this.percent = this.ngRedux.getState().percentCompleted
+    })
+  }
+
 }

@@ -1,5 +1,8 @@
+import { CHANGE_ACCOUNT_TYPE } from './../actions';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from '../store';
 
 @Component({
   selector: 'app-account-type-form',
@@ -10,8 +13,8 @@ export class AccountTypeFormComponent implements OnInit {
 
   accountSelected: number
 
-  constructor(private router: Router) { 
-    this.accountSelected = 0
+  constructor(private router: Router, private ngRedux: NgRedux<IAppState>) { 
+    this.accountSelected = this.ngRedux.getState().accountType
   }
 
   ngOnInit() {
@@ -27,6 +30,10 @@ export class AccountTypeFormComponent implements OnInit {
 
   handleSelectAccount(accountNumber) {
     this.accountSelected = accountNumber
+    this.ngRedux.dispatch({
+      type: CHANGE_ACCOUNT_TYPE,
+      data: { accountType: accountNumber }
+    })
   }
 
 }
